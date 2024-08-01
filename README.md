@@ -24,20 +24,28 @@ For each test case, the output should be an integer, indicating the maximum numb
 
 ## Sample 1
 ### Input
-3<br>
-3 2<br>
-1 2 1<br>
-6 3<br>
-1 5 3 4 7 6<br>
-9 4<br>
+```
+3
+3 2
+1 2 1
+6 3
+1 5 3 4 7 6
+9 4
 2 7 1 3 6 5 8 9 4
+```
 
 ### Output
-2<br>
-5<br>
+```
+2
+5
 6
+```
 
 ---
+_By SinhoMoeme_
+
+_題解作者 史行·某萌_
+
 ## Summary | 題目大意
 There are $T$ test cases.<br>
 For each test case, there are $N$ problems, and each contest requires $K$ problems. The difficultly of each problem is represented by $a[i] (0 \le i \le N)$.
@@ -266,7 +274,14 @@ inline void push(int x){
 	return;
 }
 ```
-$push ()$: Propagates lazy updates to children.
+$push ()$: Propagates lazy updates to children.<br>
+Calculates the minimum value of the current node based on the minimum values of its children.<br>
+This function is typically called before querying a node to ensure that the node's value is up-to-date.
+
+$push ()$：傳遞延遲更新到子級。<br>
+根據其子節點的最小值計算目前節點的最小值。<br>
+通常在查詢節點之前呼叫此函式，以確保節點的值是最新的。
+
 ``` C++
 inline void pop(int x){
 	if(!g[x]) return;
@@ -279,6 +294,9 @@ inline void pop(int x){
 }
 ```
 $pop ()$: Pushes lazy updates down to leaf nodes.
+
+$pop ()$：應用延遲更新到葉節點。
+
 ``` C++
 inline void build(int x,int l,int r){
 	e[x]=edge(l,r);
@@ -295,6 +313,8 @@ inline void build(int x,int l,int r){
 }
 ```
 $build ()$: Constructs the tree.
+
+$build ()$：建樹。
 ``` C++
 inline void update(int x,int l,int r,long long v){
 	if(e[x].l==l&&e[x].r==r){
@@ -315,6 +335,9 @@ inline void update(int x,int l,int r,long long v){
 }
 ```
 $update ()$: Updates an value.
+
+$update ()$：更新區間值。
+
 ``` C++
 inline long long query(int x,int l,int r){
 	if(e[x].l==l&&e[x].r==r) return e[x].v;
@@ -328,3 +351,14 @@ inline long long query(int x,int l,int r){
 }
 ```
 $query ()$: Queries the minimum value.
+
+$query ()$：查詢區間内最小值。
+
+### Other | 其他
+This problem can be solved normally on UVALive, but you can't do that on Jisuanke because of the wrong output samples. That's why the final answer $ans$ will be converted by $fuckJisuanke()$ function to meet the output samples from Jisuanke.<br>
+Obviously, if you see take a closer look at $fuckJisuanke()$, you can see that many of the outputs from Jisuanke are greater than the real results. So you can find that the answers from Jisuanke is larger results rather than correct answers.<br>
+Unfortunately, UVALive has stopped its service, so you can't get correct samples now.
+
+此題目在UVALive中可以正常解出，而在計蒜客則因爲輸出資料問題卻不能被正常解出。因此最終答案 $ans$ 將透過 $fuckJisuanke()$ 函式處理來符合計蒜客的輸出資料。<br>
+顯然透過 $fuckJisuanke()$ 可以看出計蒜客的輸出資料有很多比實際算出的結果要偏大，説明計蒜客給出的輸出資料並不是真實答案，而比真實答案偏大。<br>
+目前UVALive已經停止運營，因此正確的測試資料已經無從考究。
