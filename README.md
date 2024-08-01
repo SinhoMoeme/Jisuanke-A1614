@@ -235,7 +235,7 @@ inline long long fuckJisuanke(long long x){
 ## Explain | 題目講解
 This is a standard problem about a segment tree with lazy propagation. You need a program which can frequently query, update or do some other operation with the elements in different sliding windows. That's why you need the efficient data structure - segment tree to implement it.
 
-這是一道標準的懶標記綫段樹問題，程式需要在各種不同的區間進行頻繁的查找、更新元素等操作，這就需要高效的綫段樹資料結構來實現。
+這是一道標準的懶標記（延遲更新）綫段樹問題，程式需要在各種不同的區間進行頻繁的查找、更新元素等操作，這就需要高效的綫段樹資料結構來實現。
 
 ### Variables | 變數
 ``` C++
@@ -278,9 +278,9 @@ $push ()$: Propagates lazy updates to children.<br>
 Calculates the minimum value of the current node based on the minimum values of its children.<br>
 This function is typically called before querying a node to ensure that the node's value is up-to-date.
 
-$push ()$：傳遞延遲更新到子級。<br>
-根據其子節點的最小值計算目前節點的最小值。<br>
-通常在查詢節點之前呼叫此函式，以確保節點的值是最新的。
+$push ()$：傳遞懶標記到子級。<br>
+根據子節點的最小值計算當前節點的最小值。<br>
+通常在查詢前呼叫此函式，以確保節點的值已更新。
 
 ``` C++
 inline void pop(int x){
@@ -293,9 +293,15 @@ inline void pop(int x){
 	return;
 }
 ```
-$pop ()$: Pushes lazy updates down to leaf nodes.
+$pop ()$: Pushes lazy updates down to leaf nodes.<br>
+Distributes the lazy update value ( $g[x]$ ) to the children's lazy update values and subtracts the update value from the children's minimum values.<br>
+Clears the lazy update value of the current node.<br>
+This function is typically called before accessing the children of a node.
 
-$pop ()$：應用延遲更新到葉節點。
+$pop ()$：應用懶標記到葉節點。<br>
+將懶標記( $g[x]$ ) 指派給子級更新值，並從子級最小值中減去更新值。<br>
+清除當前節點的懶標記。<br>
+通常在訪問子節點之前呼叫此函式。
 
 ``` C++
 inline void build(int x,int l,int r){
@@ -312,9 +318,16 @@ inline void build(int x,int l,int r){
 	return;
 }
 ```
-$build ()$: Constructs the tree.
+$build ()$: Constructs the tree.<br>
+Recursively builds the segment tree by dividing the interval into two halves.<br>
+Calculates the minimum value of the current node based on its children's values.<br>
+Handles leaf nodes by setting the node's value to the corresponding element in the input array.
 
-$build ()$：建樹。
+$build ()$：建樹。<br>
+透過將區間分成兩半的方法，遞迴建構線段樹。<br>
+根據其子節點的值計算當前節點的最小值。<br>
+透過將節點置賦為輸入數組中的對應元素來處理葉節點。
+
 ``` C++
 inline void update(int x,int l,int r,long long v){
 	if(e[x].l==l&&e[x].r==r){
@@ -334,9 +347,13 @@ inline void update(int x,int l,int r,long long v){
 	return;
 }
 ```
-$update ()$: Updates an value.
+$update ()$: Updates an value.<br>
+If the current node completely covers the update range, updates the node's lazy value and minimum value.<br>
+Otherwise, pushes down lazy updates to children, recursively updates the appropriate child nodes, and updates the current node's value.
 
-$update ()$：更新區間值。
+$update ()$：更新區間值。<br>
+如果當前節點完美覆蓋更新範圍，立即更新節點的懶標記和最小值。<br>
+否則，將懶標記推給子級，遞迴更新合適的子節點，再更新當前節點的值。
 
 ``` C++
 inline long long query(int x,int l,int r){
@@ -350,9 +367,11 @@ inline long long query(int x,int l,int r){
 	return 0;
 }
 ```
-$query ()$: Queries the minimum value.
+$query ()$: Queries the minimum value.<br>
+The key to a successful query is almost the same as those to a successful update. You need recursion if the range is larger than those are desired.
 
-$query ()$：查詢區間内最小值。
+$query ()$：查詢區間内最小值。<br>
+查詢操作的關鍵和先前的更新操作的關鍵幾乎完全一致，如果範圍大於所需範圍，則遞迴查詢。
 
 ### Other | 其他
 This problem can be solved normally on UVALive, but you can't do that on Jisuanke because of the wrong output samples. That's why the final answer $ans$ will be converted by $fuckJisuanke()$ function to meet the output samples from Jisuanke.<br>
